@@ -4,13 +4,15 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import TextInput from "@/app/components/TextInput";
+import NumericInput from "@/app/components/NumericInput";
 import DropDown from "@/app/components/DropDown";
 
 const Page = () => {
   const [error, setError] = useState(null);
-  const [family_members_count, setFamily_members_count] = useState(0);
+  const [familyMemberCount, setFamilyMemberCount] = useState(0);
   const [selectedFamilyMembers, setSelectedFamilyMembers] = useState([]);
   const [maritalStatus, setMaritalStatus] = useState("");
+  const [memberStudying, setMemberStudying] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -31,11 +33,10 @@ const Page = () => {
     console.log(`Form Data is ${JSON.stringify(basicDetail)}`);
 
     const { family_members_count } = basicDetail;
-    if (!family_members_count || family_members_count === 0)
-    {
+    if (!family_members_count || family_members_count === 0) {
       setError("Please fill the basic information first");
     } else {
-      setFamily_members_count(family_members_count);
+      setFamilyMemberCount(family_members_count);
     }
   }, []);
 
@@ -80,12 +81,16 @@ const Page = () => {
         transition={{ duration: 0.4 }}
       >
         <div className="flex justify-center">
-          <h1 className="text-3xl font-bold">Applicant's Family Details</h1>
+          <h1 className="text-3xl font-semibold text-center text-gray-700 mb-6">
+            Applicant's Family Details
+          </h1>
         </div>
 
-        {Array.from({ length: family_members_count }).map((_, index) => (
+        {Array.from({ length: familyMemberCount }).map((_, index) => (
           <div key={index} className="flex flex-col space-y-4">
-            <h2>Enter details of Family Member {index + 1}</h2>
+            <h2 className="text-xl font-semibold mt-2.5">
+              Enter details of Family Member {index + 1}
+            </h2>
 
             {/* Name Input */}
             <TextInput
@@ -156,6 +161,8 @@ const Page = () => {
                 <option value="Other">Other</option>
               </select>
 
+              {/* Members Currently Studying  */}
+
               {/* Error Message for Validation */}
               {errors[`Family_Member_${index + 1}_Relationship`] && (
                 <p className="text-red-500 text-sm mt-1">
@@ -189,9 +196,23 @@ const Page = () => {
               isRequired={false}
               placeholder="Enter remarks"
             />
-
           </div>
         ))}
+
+        {/* Members Currently Studying  */}
+        <NumericInput
+          title="How many members are currently studying?"
+          register={register}
+          registerAs="members_studying"
+          isRequired={true}
+          requiringCaption="Please enter the number of members currently studying"
+          errors={errors}
+          min={0}
+          max={familyMemberCount}
+          lengthCaption="Please enter valid Count"
+          placeholder={`Enter number of members studying`}
+          length={1}
+        />
 
         <div className="flex justify-center gap-5">
           {/* Continue Button */}

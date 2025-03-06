@@ -96,8 +96,7 @@ export default function BasicInfo() {
             requiringCaption="Roll number is required"
             register={register}
             errors={errors}
-            minLength={11}
-            maxLength={11}
+            length={11}
             lengthCaption="Roll number must be exactly 11 digits"
             width="w-1/2"
           />
@@ -124,8 +123,7 @@ export default function BasicInfo() {
           requiringCaption="Identity Card number is required"
           register={register}
           errors={errors}
-          minLength={13}
-          maxLength={13}
+          length={13}
           lengthCaption="Identity Card number must be exactly 11 digits"
         />
 
@@ -153,6 +151,8 @@ export default function BasicInfo() {
             placeholder="Enter your age"
             isRequired={true}
             requiringCaption="Age is required"
+            min={15}
+            length={2}
             register={register}
             errors={errors}
             width="w-1/2"
@@ -286,6 +286,8 @@ export default function BasicInfo() {
             register={register}
             errors={errors}
             width="w-1/3"
+            length={11}
+            lengthCaption="Telephone number must be exactly 11 digits"
           />
 
           {/* Applicant's Mobile Number */}
@@ -297,8 +299,7 @@ export default function BasicInfo() {
             requiringCaption="Mobile number is required"
             register={register}
             errors={errors}
-            minLength={11}
-            maxLength={11}
+            length={11}
             lengthCaption="Mobile number must be exactly 11 digits"
             width="w-1/3"
           />
@@ -326,6 +327,7 @@ export default function BasicInfo() {
           register={register}
           errors={errors}
           width="w-full"
+          length={1}
         />
 
         <div className="flex justify-center gap-5">

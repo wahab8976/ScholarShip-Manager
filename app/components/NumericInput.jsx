@@ -9,8 +9,9 @@ const NumericInput = ({
   register,
   errors,
   width,
-  minLength,
-  maxLength,
+  min,
+  max,
+  length,
   lengthCaption,
 }) => {
   return (
@@ -22,24 +23,27 @@ const NumericInput = ({
         {title}
       </label>
       <input
-        type="text"
+        type="number"
         id={registerAs}
         className="w-full px-4 py-3 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         placeholder={placeholder}
+        min={min}
+        max={max}
         {...register(registerAs, {
           required: isRequired
             ? { value: true, message: requiringCaption }
             : false,
-          minLength: minLength
-            ? { value: minLength, message: lengthCaption }
-            : undefined,
-          maxLength: maxLength
-            ? { value: maxLength, message: lengthCaption }
-            : undefined,
-          pattern: {
-            value: /^[0-9]+$/,
-            message: "This field can only contain numbers",
-          },
+          min:
+            min !== undefined
+              ? { value: min, message: "Value cannot be negative" }
+              : undefined,
+          max:
+            max !== undefined
+              ? { value: max, message: lengthCaption }
+              : undefined,
+          validate: (value) =>
+            value.toString().length === length ||
+            `Must be exactly ${length} characters`,
         })}
       />
       {errors?.[registerAs] && (
