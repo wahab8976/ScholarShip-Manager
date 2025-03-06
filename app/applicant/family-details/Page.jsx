@@ -3,6 +3,7 @@ import { useEffect, useState, React } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import TextInput from "@/app/components/TextInput";
 
 const Page = () => {
   const [error, setError] = useState(null);
@@ -48,12 +49,31 @@ const Page = () => {
 
         {Array.from({ length: family_members_count }).map((_, index) => (
           <div key={index} className="flex flex-col space-y-4">
-            Family member count {index + 1}
+            <h2>Enter details of Family Member {index + 1}</h2>
+            {/* Name for Members  */}
+            <TextInput
+              title="Name"
+              register={register}
+              registerAs={`Family_Member_${index + 1}_Name`}
+              isRequired={true}
+              requiringCaption={`Name for is Required for Family member ${
+                index + 1
+              }`}
+              errors={errors}
+              placeholder="Enter name"
+            />
           </div>
+          
         ))}
-
-
-        
+        <button
+          className="bg-green-300"
+          onClick={() => {
+            console.log("Button is cliked");
+          }}
+          type="submit"
+        >
+          ok
+        </button>
       </motion.form>
     </div>
   );
