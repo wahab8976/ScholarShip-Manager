@@ -8,6 +8,15 @@ import NumericInput from "@/app/components/NumericInput";
 import DisabledTextInput from "@/app/components/DisabledTextInput";
 import { useRouter } from "next/navigation";
 
+/**
+ * @see {@link /applicant/family-details} - Navigate to the Family Details page.
+ * @description This component displays the Applicant's Family Details Form.
+ * @state {Boolean} isUnEmployed - Indicates whether the applicant is employed or not. Used to enable/Disable Income Input.
+ * @state {Boolean} loading - Indicates whether the form is being submitted.
+ * @state {Object} formData - Holds form data submitted by the user. Stored in Browser's Local Storage.
+ * @returns {JSX.Element} The BasicInfo component.
+ */
+
 export default function BasicInfo() {
   const {
     register,

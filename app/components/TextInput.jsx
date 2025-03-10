@@ -1,5 +1,20 @@
 import React from "react";
 
+/**
+ * TextInput Component
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.title - The label for the input field
+ * @param {string} props.registerAs - The name used to register the input field in react-hook-form
+ * @param {string} [props.placeholder] - The placeholder text for the input field
+ * @param {boolean} props.isRequired - Whether the input field is required
+ * @param {string} props.requiringCaption - The message displayed when the field is required but empty
+ * @param {Object} props.register - The register function from react-hook-form
+ * @param {Object} props.errors - The errors object from react-hook-form
+ * @param {string} [props.width] - The width class for the input field
+ * @returns {JSX.Element} - A text input field component
+ */
 const TextInput = ({
   title,
   registerAs,

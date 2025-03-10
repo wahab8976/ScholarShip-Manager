@@ -7,6 +7,22 @@ import TextInput from "@/app/components/TextInput";
 import NumericInput from "@/app/components/NumericInput";
 import DropDown from "@/app/components/DropDown";
 
+/**
+ * FamilyDetails Component
+ *
+ * @description This component manages family details, including member count, relationships, marital status, and study status.
+ * It retrieves data from Local Storage and ensures valid selections.
+ *
+ * @state {string} error - Holds an error message if any.
+ * @state {number} familyMemberCount - Number of family members, retrieved from Local Storage (stored in Basic Information).
+ * @state {Array} selectedFamilyMembers - Selected relationship for each family member. Used to prevent duplicate relationships.
+ * @state {string} maritalStatus - The selected marital status.
+ * @state {number} memberStudying - Number of family members currently studying. Used in the next step for additional details.
+ * @state {boolean} loading - Indicates whether the form is currently submitting.
+ *
+ * @returns {JSX.Element} The FamilyDetails component.
+ */
+
 const Page = () => {
   const [error, setError] = useState(null);
   const [familyMemberCount, setFamilyMemberCount] = useState(0);

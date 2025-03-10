@@ -1,5 +1,27 @@
 import React from "react";
 
+/**
+ * NumericInput Component
+ *
+ * @description A reusable numeric input field with validation, styling, and error handling using react-hook-form.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.title - The title of the input field (label).
+ * @param {string} props.registerAs - The name of the input field to be registered as.
+ * @param {string} props.placeholder - The placeholder text for the input field.
+ * @param {boolean} props.isRequired - Whether the input is required.
+ * @param {string} props.requiringCaption - Message to display when the input is required.
+ * @param {Function} props.register - React Hook Form's register function.
+ * @param {Object} props.errors - Object containing form validation errors.
+ * @param {string} [props.width="w-full"] - CSS class for input width (default: full width).
+ * @param {number} [props.min] - Minimum value allowed for the input.
+ * @param {number} [props.max] - Maximum value allowed for the input.
+ * @param {number} [props.length] - Exact length required for the input value.
+ * @param {string} [props.lengthCaption] - Message to display if length constraint is not met.
+ *
+ * @returns {JSX.Element} NumericInput component.
+ */
+
 const NumericInput = ({
   title,
   registerAs,
@@ -8,14 +30,14 @@ const NumericInput = ({
   requiringCaption,
   register,
   errors,
-  width,
+  width = "w-full",
   min,
   max,
   length,
   lengthCaption,
 }) => {
   return (
-    <div className={`${width ? width : "w-full"} mb-6`}>
+    <div className={`${width} mb-6`}>
       <label
         htmlFor={registerAs}
         className="block text-gray-700 font-medium mb-2"

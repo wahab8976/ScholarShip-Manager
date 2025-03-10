@@ -1,15 +1,26 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 
+/**
+ * ProceedConfirmation Component
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {boolean} props.proceedConfirmation - State to control visibility of the confirmation dialog
+ * @param {Function} props.setProceedConfirmation - Function to update proceed confirmation state
+ * @returns {JSX.Element} - A confirmation dialog for proceeding with the application
+ */
 const ProceedConfirmation = ({
   proceedConfirmation,
   setProceedConfirmation,
 }) => {
   const router = useRouter();
 
+  /**
+   * Handles redirection to the application page and updates state.
+   */
   const handleRedirectToApplication = () => {
     router.push("/applicant/info");
     setProceedConfirmation(false);

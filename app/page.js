@@ -2,6 +2,22 @@
 import React from "react";
 import { useState, useRef } from "react";
 import ProceedConfirmation from "./components/ProceedConfirmation";
+
+/**
+ * HomePage Component
+ *
+ * @description This component displays the Application Form Checklist.
+ * It manages form submission, user confirmation, and a reference for proceeding.
+ *
+ * @see {@link /info} - Navigate to the Info page.
+ *
+ * @state {Object} formData - Holds form data submitted by the user.
+ * @state {Boolean} proceedConfirmation - Indicates whether the user has confirmed to proceed.
+ * @ref {Object} proceedRef - Reference for proceeding action.
+ *
+ * @returns {JSX.Element} The HomePage component.
+ */
+
 const page = () => {
   const [formData, setFormData] = useState({});
   const [proceedConfirmation, setProceedConfirmation] = useState(false);
