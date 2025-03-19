@@ -66,6 +66,7 @@ const Page = () => {
   const onSubmit = (data) => {
     console.log(`Data is ${JSON.stringify(data)}`);
     localStorage.setItem("Applicant's Family Details", JSON.stringify(data));
+    router.push("/applicant/earnings");
   };
 
   // Handle relationship selection
