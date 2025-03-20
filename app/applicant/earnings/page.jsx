@@ -30,7 +30,16 @@ const Page = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      familyMembers: [{ name: "", occupation: "", income: "", role: "" }],
+      familyMembers: [
+        {
+          name: "",
+          occupation: "",
+          jobDesignation: "",
+          organization: "",
+          income: "",
+          role: "",
+        },
+      ],
     },
   });
 
@@ -39,10 +48,8 @@ const Page = () => {
     name: "familyMembers",
   });
 
-  // Track selected roles
   const selectedRoles = watch("familyMembers")?.map((member) => member.role);
 
-  // Load data from local storage when component mounts
   useEffect(() => {
     const storedData = localStorage.getItem("familyMembers");
     if (storedData) {
@@ -76,11 +83,18 @@ const Page = () => {
         <button
           type="button"
           onClick={() =>
-            append({ name: "", occupation: "", income: "", role: "" })
+            append({
+              name: "",
+              occupation: "",
+              jobDesignation: "",
+              organization: "",
+              income: "",
+              role: "",
+            })
           }
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          className="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
         >
-          Add Family Member
+          Add
         </button>
 
         {fields.map((member, index) => (
@@ -96,9 +110,13 @@ const Page = () => {
                 <button
                   type="button"
                   onClick={() => remove(index)}
-                  className="bg-red-500 text-white px-3 py-1 rounded"
+                  className="cursor-pointer text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm p-2 text-center me-2 mb-2"
                 >
-                  Delete
+                  <img
+                    className="h-6"
+                    src="/Trash.svg"
+                    alt="Delete Family Member"
+                  />
                 </button>
               )}
             </div>
@@ -133,8 +151,44 @@ const Page = () => {
               </p>
             )}
 
+            {/* Job Designation */}
+            <label className="block text-sm font-medium mt-2">
+              Job Designation
+            </label>
+            <input
+              {...register(`familyMembers.${index}.jobDesignation`, {
+                required: "Job Designation is required",
+              })}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              placeholder="Enter job designation"
+            />
+            {errors.familyMembers?.[index]?.jobDesignation && (
+              <p className="text-red-500 text-sm">
+                {errors.familyMembers[index].jobDesignation.message}
+              </p>
+            )}
+
+            {/* Organization */}
+            <label className="block text-sm font-medium mt-2">
+              Organization
+            </label>
+            <input
+              {...register(`familyMembers.${index}.organization`, {
+                required: "Organization is required",
+              })}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              placeholder="Enter organization name"
+            />
+            {errors.familyMembers?.[index]?.organization && (
+              <p className="text-red-500 text-sm">
+                {errors.familyMembers[index].organization.message}
+              </p>
+            )}
+
             {/* Income */}
-            <label className="block text-sm font-medium mt-2">Income</label>
+            <label className="block text-sm font-medium mt-2">
+              Income in Rs.
+            </label>
             <input
               {...register(`familyMembers.${index}.income`, {
                 required: "Income is required",
@@ -186,7 +240,7 @@ const Page = () => {
 
         <button
           type="submit"
-          className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
+          className="cursor-pointer text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
         >
           Submit
         </button>
