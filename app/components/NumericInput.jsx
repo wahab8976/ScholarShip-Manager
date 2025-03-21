@@ -16,8 +16,7 @@ import React from "react";
  * @param {string} [props.width="w-full"] - CSS class for input width (default: full width).
  * @param {number} [props.min] - Minimum value allowed for the input.
  * @param {number} [props.max] - Maximum value allowed for the input.
- * @param {number} [props.length] - Exact length required for the input value.
- * @param {string} [props.lengthCaption] - Message to display if length constraint is not met.
+ * @param {number} [props.length] - Exact length required for the input value (optional).
  *
  * @returns {JSX.Element} NumericInput component.
  */
@@ -33,8 +32,7 @@ const NumericInput = ({
   width = "w-full",
   min,
   max,
-  length,
-  lengthCaption,
+  length, // Optional length prop
 }) => {
   return (
     <div className={`${width} mb-6`}>
@@ -57,15 +55,19 @@ const NumericInput = ({
             : false,
           min:
             min !== undefined
-              ? { value: min, message: "Value cannot be negative" }
+              ? { value: min, message: `Value must be at least ${min}` }
               : undefined,
           max:
             max !== undefined
-              ? { value: max, message: lengthCaption }
+              ? { value: max, message: `Value cannot exceed ${max}` }
               : undefined,
-          validate: (value) =>
-            value.toString().length === length ||
-            `Must be exactly ${length} characters`,
+          ...(length !== undefined
+            ? {
+                validate: (value) =>
+                  value.toString().length === length ||
+                  `Must be exactly ${length} characters`,
+              }
+            : {}),
         })}
       />
       {errors?.[registerAs] && (

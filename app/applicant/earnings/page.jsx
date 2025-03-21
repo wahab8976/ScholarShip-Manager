@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const allFamilyRoles = [
   "Father",
@@ -43,6 +44,8 @@ const Page = () => {
     },
   });
 
+  const router = useRouter();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "familyMembers",
@@ -69,7 +72,7 @@ const Page = () => {
     <div className="flex justify-center flex-col items-center min-h-screen bg-gray-100 p-4">
       <div className="flex justify-center">
         <h1 className="text-3xl font-semibold text-center text-gray-700 mb-6">
-          Applicant's Family Details
+          Applicant's Family Earning Details
         </h1>
       </div>
       <motion.form
@@ -239,6 +242,7 @@ const Page = () => {
         ))}
 
         <button
+          onClick={() => router.push("/applicant/siblings")}
           type="submit"
           className="cursor-pointer text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
         >
