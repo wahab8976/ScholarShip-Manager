@@ -1,16 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import NumericInput from "@/app/components/NumericInput";
 import TextInput from "@/app/components/TextInput";
+import ProceedPayment from "@/app/components/ProceedPayment";
 
 const Page = () => {
   const {
     register,
     control,
     handleSubmit,
+    isSubmitting,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     mode: "onBlur", // Trigger validation on blur
@@ -24,11 +27,49 @@ const Page = () => {
 
   const [siblingsCount, setSiblingsCount] = useState(0);
   const [totalCharges, settotalCharges] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [showTotalCharges, setShowTotalCharges] = useState(false);
 
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    console.log("Errors:", errors);
+    try {
+      setLoading(true);
+      console.log("Form Data:", data);
+
+      // Calculate total charges
+      let totalCharges = 0;
+      if (Array.isArray(data.siblings)) {
+        data.siblings.forEach((sibling) => {
+          totalCharges += Number(sibling.fee);
+        });
+        settotalCharges(totalCharges);
+
+        // Show modal when totalCharges is updated
+        if (totalCharges > 0) {
+          setShowTotalCharges(true);
+        }
+      }
+
+      console.log("Total Charges:", totalCharges);
+      localStorage.setItem("siblings", JSON.stringify(data));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    const formData = localStorage.getItem("siblings");
+    if (formData) {
+      const parsedData = JSON.parse(formData);
+
+      // Check if parsedData is an object and contains a valid siblings array
+      if (parsedData && Array.isArray(parsedData.siblings)) {
+        setSiblingsCount(parsedData.siblings.length);
+        reset(parsedData); // Reset the form with the stored data
+      }
+    }
+  }, [append, reset]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
@@ -157,12 +198,21 @@ const Page = () => {
         {/* Submit button */}
         <div className="mt-4">
           <button
+            disabled={isSubmitting}
             type="submit"
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
           >
             Submit
           </button>
         </div>
+
+        {showTotalCharges && (
+          <ProceedPayment
+            totalCharges={totalCharges}
+            showTotalCharges={showTotalCharges}
+            setShowTotalCharges={setShowTotalCharges}
+          />
+        )}
       </motion.form>
     </div>
   );
