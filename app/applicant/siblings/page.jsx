@@ -4,9 +4,15 @@ import { motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import NumericInput from "@/app/components/NumericInput";
 import TextInput from "@/app/components/TextInput";
+import { useRouter } from "next/navigation";
 import ProceedPayment from "@/app/components/ProceedPayment";
 
 const Page = () => {
+  const [siblingsCount, setSiblingsCount] = useState(0);
+  const [totalCharges, settotalCharges] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [showTotalCharges, setShowTotalCharges] = useState(false);
+
   const {
     register,
     control,
@@ -25,10 +31,7 @@ const Page = () => {
     name: "siblings",
   });
 
-  const [siblingsCount, setSiblingsCount] = useState(0);
-  const [totalCharges, settotalCharges] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [showTotalCharges, setShowTotalCharges] = useState(false);
+  const router = useRouter();
 
   const onSubmit = (data) => {
     try {
@@ -51,6 +54,7 @@ const Page = () => {
 
       console.log("Total Charges:", totalCharges);
       localStorage.setItem("siblings", JSON.stringify(data));
+      router.push("/applicant/declare-assets");
     } catch (error) {
       console.error(error);
     } finally {

@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function AssetIncomeForm() {
   const { register, watch, handleSubmit, setValue } = useForm();
@@ -25,6 +26,7 @@ export default function AssetIncomeForm() {
 
   // Watch form values and update total
   const formValues = watch();
+  const router = useRouter();
 
   useEffect(() => {
     let newTotal = 0;
@@ -40,13 +42,14 @@ export default function AssetIncomeForm() {
   const onSubmit = (data) => {
     console.log("Form Data:", data);
     localStorage.setItem("assetIncomeForm", JSON.stringify(data));
+    router.push("/applicant/total-income");
   };
 
   return (
     <div className="flex justify-center flex-col items-center min-h-screen bg-gray-100 p-4">
       <div className="flex justify-center">
         <h1 className="text-3xl font-semibold text-center text-gray-700 mb-6">
-          Applicant's Family Earning Details
+          Declare your Assets
         </h1>
       </div>
 
