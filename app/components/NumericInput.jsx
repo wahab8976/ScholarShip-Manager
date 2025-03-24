@@ -22,6 +22,7 @@ import React from "react";
  */
 
 const NumericInput = ({
+  disabled,
   title,
   registerAs,
   placeholder,
@@ -48,6 +49,7 @@ const NumericInput = ({
         className="w-full px-4 py-3 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         placeholder={placeholder}
         min={min}
+        disabled={disabled ? true : false}
         max={max}
         {...register(registerAs, {
           required: isRequired

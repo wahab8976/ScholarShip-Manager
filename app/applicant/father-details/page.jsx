@@ -5,19 +5,33 @@ import { useForm } from "react-hook-form";
 import TextInput from "@/app/components/TextInput";
 import NumericInput from "@/app/components/NumericInput";
 import { useState, useEffect } from "react";
+import DisabledTextInput from "@/app/components/DisabledTextInput";
 const Page = () => {
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm();
 
   const [supportingPerson, setSupportingPerson] = useState(true);
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    localStorage.setItem("fatherDetails", JSON.stringify(data));
+    console.log(data);
+  };
 
   useEffect(() => {
-    console.log(`Supporting Person: ${supportingPerson}`);
-  }, [supportingPerson]);
+    const storedDetails = localStorage.getItem("fatherDetails");
+    if (storedDetails) {
+      const fatherDetails = JSON.parse(storedDetails);
+      console.log(fatherDetails);
+
+      // Populate form fields with stored data
+      Object.keys(fatherDetails).forEach((key) => {
+        setValue(key, fatherDetails[key]);
+      });
+    }
+  }, [setValue]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
@@ -213,7 +227,7 @@ const Page = () => {
         </div>
         <div className="flex flex-row gap-4">
           {/* Supporting Person Name Input */}
-          <TextInput
+          <DisabledTextInput
             title="24. Name"
             errors={errors}
             isRequired={supportingPerson}
@@ -222,6 +236,7 @@ const Page = () => {
             requiringCaption="Supporting Person Name is required"
             placeholder="Enter Supporting Person Name"
             width="w-1/2"
+            isDisabled={!supportingPerson}
           />
           {/* RelationShip DropDown  */}
           <div className="w-1/2">
@@ -254,7 +269,7 @@ const Page = () => {
         </div>
 
         <div className="flex flex-row gap-4">
-          <TextInput
+          <DisabledTextInput
             title="Occupation and Designation"
             register={register}
             registerAs="Supporting_Person_Occupation"
@@ -263,6 +278,7 @@ const Page = () => {
             requiringCaption="Occupation and Designation is required"
             placeholder="Enter Occupation and Designation"
             width="w-1/2"
+            isDisabled={!supportingPerson}
           />
 
           <NumericInput
@@ -275,6 +291,7 @@ const Page = () => {
             placeholder="Enter Monthly Income"
             min={0}
             width="w-1/2"
+            disabled={!supportingPerson}
           />
         </div>
 
