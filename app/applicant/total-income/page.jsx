@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { calc } from "antd/es/theme/internal";
 
 export default function FamilyIncomeForm() {
   const { register, watch, handleSubmit, setValue } = useForm();
@@ -37,7 +38,7 @@ export default function FamilyIncomeForm() {
   const formValues = watch();
 
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("assetIncomeForm"));
+    const savedData = JSON.parse(localStorage.getItem("monthlyFamilyIncome"));
     if (savedData) {
       console.log("Saved Data:", savedData);
 
@@ -64,7 +65,7 @@ export default function FamilyIncomeForm() {
   };
 
   const onSubmit = (data) => {
-    console.log("Form Data Submitted:", data);
+    console.log("Form Data Submitted of Monthly Gross Income:", data);
     localStorage.setItem("monthlyFamilyIncome", JSON.stringify(data));
     router.push("/applicant/total-income");
   };

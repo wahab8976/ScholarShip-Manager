@@ -6,6 +6,8 @@ import TextInput from "@/app/components/TextInput";
 import NumericInput from "@/app/components/NumericInput";
 import { useState, useEffect } from "react";
 import DisabledTextInput from "@/app/components/DisabledTextInput";
+import { useRouter } from "next/navigation";
+
 const Page = () => {
   const {
     handleSubmit,
@@ -15,8 +17,11 @@ const Page = () => {
   } = useForm();
 
   const [supportingPerson, setSupportingPerson] = useState(true);
+  const router = useRouter();
+
   const onSubmit = (data) => {
     localStorage.setItem("fatherDetails", JSON.stringify(data));
+    router.push("/applicant/declare-assets");
     console.log(data);
   };
 

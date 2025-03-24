@@ -21,6 +21,7 @@ export default function AssetIncomeForm() {
   // Load saved data from localStorage
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("assetIncomeForm")) || {};
+    console.log(`Declared Assets ${JSON.stringify(savedData)}`);
     Object.keys(savedData).forEach((key) => setValue(key, savedData[key]));
   }, [setValue]);
 
@@ -41,6 +42,7 @@ export default function AssetIncomeForm() {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+
     localStorage.setItem("assetIncomeForm", JSON.stringify(data));
     router.push("/applicant/total-income");
   };
