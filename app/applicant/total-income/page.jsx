@@ -4,11 +4,10 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { calc } from "antd/es/theme/internal";
 
 export default function FamilyIncomeForm() {
   const { register, watch, handleSubmit, setValue } = useForm();
-  const [total, setTotal] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
   const [selectedRelations, setSelectedRelations] = useState({});
   const router = useRouter();
 
@@ -22,51 +21,70 @@ export default function FamilyIncomeForm() {
   ];
   const incomeFields = ["incomeFromAssets", "grossPay", "netPay"];
 
-  // Load saved data from localStorage
+  // Load data from localStorage on mount
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("monthlyFamilyIncome"));
+    const savedData = JSON.parse(localStorage.getItem("familyIncomeData"));
     if (savedData) {
-      console.log("Loaded Data from Local Storage:", savedData);
-      Object.keys(savedData).forEach((key) => {
-        if (savedData[key] !== undefined) {
-          setValue(key, savedData[key]);
+      Object.entries(savedData).forEach(([key, value]) => {
+        setValue(key, value);
+      });
+
+      const relations = {};
+      Object.entries(savedData).forEach(([key, value]) => {
+        if (key.startsWith("relation_")) {
+          const index = key.split("_")[1];
+          relations[index] = value;
         }
       });
+      setSelectedRelations(relations);
+      calculateTotal(savedData);
     }
   }, [setValue]);
 
   const formValues = watch();
 
+  // Recalculate total on form update
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("monthlyFamilyIncome"));
-    if (savedData) {
-      console.log("Saved Data:", savedData);
+    calculateTotal(formValues);
+  }, [formValues]);
 
-      Object.keys(savedData).forEach((key) => setValue(key, savedData[key]));
-
-      // Extract relationship data and update state
-      const relations = {};
-      Object.keys(savedData).forEach((key) => {
-        if (key.startsWith("relation_")) {
-          const index = key.split("_")[1];
-          relations[index] = savedData[key];
-        }
-      });
-
-      setSelectedRelations(relations);
-    }
-  }, [setValue]);
-
-  const handleRelationChange = (index, value) => {
-    setSelectedRelations((prev) => {
-      const updated = { ...prev, [index]: value };
-      return updated;
+  // Update total income calculation
+  const calculateTotal = (data) => {
+    let sum = 0;
+    Object.entries(data).forEach(([key, value]) => {
+      if (
+        (key.startsWith("incomeFromAssets_") ||
+          key.startsWith("grossPay_") ||
+          key.startsWith("netPay_")) &&
+        !isNaN(parseFloat(value))
+      ) {
+        sum += parseFloat(value);
+      }
     });
+    setTotalIncome(sum);
+  };
+
+  // Handle relationship select
+  const handleRelationChange = (index, value) => {
+    const updatedRelations = { ...selectedRelations, [index]: value };
+    setSelectedRelations(updatedRelations);
   };
 
   const onSubmit = (data) => {
-    console.log("Form Data Submitted of Monthly Gross Income:", data);
-    localStorage.setItem("monthlyFamilyIncome", JSON.stringify(data));
+    const filteredData = {};
+    Object.entries(data).forEach(([key, value]) => {
+      if (
+        key.startsWith("relation_") ||
+        key.startsWith("incomeFromAssets_") ||
+        key.startsWith("grossPay_") ||
+        key.startsWith("netPay_")
+      ) {
+        filteredData[key] = value;
+      }
+    });
+
+    console.log("Saved Data:", filteredData);
+    localStorage.setItem("familyIncomeData", JSON.stringify(filteredData));
     router.push("/applicant/total-income");
   };
 
@@ -88,7 +106,6 @@ export default function FamilyIncomeForm() {
           <thead>
             <tr className="bg-gray-200">
               <th className="border border-gray-400 p-2">S#</th>
-              <th className="border border-gray-400 p-2">Family Member Name</th>
               <th className="border border-gray-400 p-2">Relationship</th>
               <th className="border border-gray-400 p-2">Income from Assets</th>
               <th className="border border-gray-400 p-2">Gross Pay</th>
@@ -100,29 +117,23 @@ export default function FamilyIncomeForm() {
               <tr key={index} className="text-center">
                 <td className="border border-gray-400 p-2">{index + 1}</td>
                 <td className="border border-gray-400 p-2">
-                  <input
-                    type="text"
-                    className="w-full p-1 border border-gray-300 rounded"
-                    {...register(`member_${index}`)}
-                  />
-                </td>
-                <td className="border border-gray-400 p-2">
                   <select
                     className="w-full p-1 border border-gray-300 rounded"
                     {...register(`relation_${index}`)}
+                    value={selectedRelations[index] || ""}
                     onChange={(e) =>
                       handleRelationChange(index, e.target.value)
                     }
-                    value={selectedRelations[index] || ""}
                   >
                     <option value="">Select</option>
                     {relationships.map((rel) => (
                       <option
                         key={rel}
                         value={rel}
-                        disabled={Object.values(selectedRelations).includes(
-                          rel
-                        )}
+                        disabled={
+                          Object.values(selectedRelations).includes(rel) &&
+                          selectedRelations[index] !== rel
+                        }
                       >
                         {rel}
                       </option>
@@ -135,16 +146,17 @@ export default function FamilyIncomeForm() {
                       type="number"
                       className="w-full p-1 border border-gray-300 rounded"
                       {...register(`${field}_${index}`)}
+                      defaultValue={0}
                     />
                   </td>
                 ))}
               </tr>
             ))}
             <tr className="bg-gray-100 font-bold text-center">
-              <td className="border border-gray-400 p-2" colSpan="5">
-                Total Monthly Net Income
+              <td className="border border-gray-400 p-2" colSpan="4">
+                Total Income
               </td>
-              <td className="border border-gray-400 p-2">{total}</td>
+              <td className="border border-gray-400 p-2">{totalIncome}</td>
             </tr>
           </tbody>
         </table>
